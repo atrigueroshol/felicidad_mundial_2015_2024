@@ -25,8 +25,12 @@ df_2022["Year"] = "2022"
 df_2023["Year"] = "2023"
 df_2024["Year"] = "2024"
 
+#Renombramos la solumna del fichero de 2024
+df_2024.rename(columns={"Ladder score": "Happiness score"}, inplace=True)
+
+
 #Unificamos los df
-df_all = pd.concat([df_2015, df_2016, df_2017, df_2018, df_2019, df_2020, df_2021, df_2022, df_2023, df_2024], axis=1)
+df_all = pd.concat([df_2015, df_2016, df_2017, df_2018, df_2019, df_2020, df_2021, df_2022, df_2023, df_2024], axis=0)
 
 print(df_all)
 
