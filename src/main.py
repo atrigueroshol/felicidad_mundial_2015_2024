@@ -1,45 +1,45 @@
 #Import de librerías
 import pandas as pd
+#Import de funciones
+import load, transform
 
-#Lectura de los CSVs originales
-df_2015 = pd.read_csv("data/world_happiness_2015.csv", sep=";")
-df_2016 = pd.read_csv("data/world_happiness_2016.csv", sep=";")
-df_2017 = pd.read_csv("data/world_happiness_2017.csv", sep=";")
-df_2018 = pd.read_csv("data/world_happiness_2018.csv", sep=";")
-df_2019 = pd.read_csv("data/world_happiness_2019.csv", sep=";")
-df_2020 = pd.read_csv("data/world_happiness_2020.csv", sep=";")
-df_2021 = pd.read_csv("data/world_happiness_2021.csv", sep=";")
-df_2022 = pd.read_csv("data/world_happiness_2022.csv", sep=";")
-df_2023 = pd.read_csv("data/world_happiness_2023.csv", sep=";")
-df_2024 = pd.read_csv("data/world_happiness_2024.csv", sep=";")
+#Definimos los ficheros y los cargamos en nuestro dataframe
+csvs =[]
+csvs.append("data/world_happiness_2015.csv")
+csvs.append("data/world_happiness_2016.csv")
+csvs.append("data/world_happiness_2017.csv")
+csvs.append("data/world_happiness_2018.csv")
+csvs.append("data/world_happiness_2019.csv")
+csvs.append("data/world_happiness_2020.csv")
+csvs.append("data/world_happiness_2021.csv")
+csvs.append("data/world_happiness_2022.csv")
+csvs.append("data/world_happiness_2023.csv")
+csvs.append("data/world_happiness_2024.csv")
+dfs = load.load_csvs(csvs)
+df_all = pd.concat(dfs, axis=0)
 
-#Añadimos la columna Year a cada uno de los dataframes
-df_2015["Year"] = "2015"
-df_2016["Year"] = "2016"
-df_2017["Year"] = "2017"
-df_2018["Year"] = "2018"
-df_2019["Year"] = "2019"
-df_2020["Year"] = "2020"
-df_2021["Year"] = "2021"
-df_2022["Year"] = "2022"
-df_2023["Year"] = "2023"
-df_2024["Year"] = "2024"
+#Renombramos la columna Ladder score como Hapiness score
+if "Ladder score" in df_all.columns:
+    df_all = transform.transf_ladder_score(df_all)
 
-#Renombramos la solumna del fichero de 2024
-df_2024.rename(columns={"Ladder score": "Happiness score"}, inplace=True)
 
-#Unificamos los df
-df_all = pd.concat([df_2015, df_2016, df_2017, df_2018, df_2019, df_2020, df_2021, df_2022, df_2023, df_2024], axis=0)
 
-#Transformación de los nulos en la columna Regional Indicator
-moda_greece = df_all[df_all["Country"] == "Greece"]["Regional indicator"].mode()[0]
-df_all.loc[(df_all["Country"] == "Greece") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_greece
 
-moda_cyprus = df_all[df_all["Country"] == "Cyprus"]["Regional indicator"].mode()[0]
-df_all.loc[(df_all["Country"] == "Cyprus") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_cyprus
+# #Renombramos la solumna del fichero de 2024
+# df_2024.rename(columns={"Ladder score": "Happiness score"}, inplace=True)
 
-moda_gambia = df_all[df_all["Country"] == "Gambia"]["Regional indicator"].mode()[0]
-df_all.loc[(df_all["Country"] == "Gambia") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_gambia
+# #Unificamos los df
+# df_all = pd.concat([df_2015, df_2016, df_2017, df_2018, df_2019, df_2020, df_2021, df_2022, df_2023, df_2024], axis=0)
 
-print(df_all)
+# #Transformación de los nulos en la columna Regional Indicator
+# moda_greece = df_all[df_all["Country"] == "Greece"]["Regional indicator"].mode()[0]
+# df_all.loc[(df_all["Country"] == "Greece") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_greece
+
+# moda_cyprus = df_all[df_all["Country"] == "Cyprus"]["Regional indicator"].mode()[0]
+# df_all.loc[(df_all["Country"] == "Cyprus") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_cyprus
+
+# moda_gambia = df_all[df_all["Country"] == "Gambia"]["Regional indicator"].mode()[0]
+# df_all.loc[(df_all["Country"] == "Gambia") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_gambia
+
+# print(df_all)
 
