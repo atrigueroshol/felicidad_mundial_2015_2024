@@ -28,9 +28,18 @@ df_2024["Year"] = "2024"
 #Renombramos la solumna del fichero de 2024
 df_2024.rename(columns={"Ladder score": "Happiness score"}, inplace=True)
 
-
 #Unificamos los df
 df_all = pd.concat([df_2015, df_2016, df_2017, df_2018, df_2019, df_2020, df_2021, df_2022, df_2023, df_2024], axis=0)
+
+#Transformación de los nulos en la columna Regional Indicator
+moda_greece = df_all[df_all["Country"] == "Greece"]["Regional indicator"].mode()[0]
+df_all.loc[(df_all["Country"] == "Greece") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_greece
+
+moda_cyprus = df_all[df_all["Country"] == "Cyprus"]["Regional indicator"].mode()[0]
+df_all.loc[(df_all["Country"] == "Cyprus") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_cyprus
+
+moda_gambia = df_all[df_all["Country"] == "Gambia"]["Regional indicator"].mode()[0]
+df_all.loc[(df_all["Country"] == "Gambia") & (df_all["Regional indicator"].isnull()), "Regional indicator"] = moda_gambia
 
 print(df_all)
 
